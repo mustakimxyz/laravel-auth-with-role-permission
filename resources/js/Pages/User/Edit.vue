@@ -102,7 +102,7 @@
 							<InputError class="mt-2" :message="form.errors.email" />
 						</div>
 						<div>
-							<InputLabel for="role" value="Position" />
+							<InputLabel for="role" value="Approval Status" />
 
 							<select
 								name="approval_status"

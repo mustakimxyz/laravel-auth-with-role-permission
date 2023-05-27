@@ -1,6 +1,5 @@
 <script setup>
 	import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-	import GuestLayout from "@/Layouts/GuestLayout.vue";
 	import { Head, useForm } from "@inertiajs/vue3";
 	import PrimaryButton from "@/Components/PrimaryButton.vue";
 	import DangerButton from "@/Components/DangerButton.vue";
@@ -14,20 +13,11 @@
 		password: "",
 	});
 
-	
-
-	const deleteUser = (id) => {
-		form.delete(route("employee.delete", { id }), {
-			preserveScroll: true,
-			onSuccess: () => closeModal(),
-			onFinish: () => form.reset(),
-		});
-	};
-	const closeModal = () => {
-		confirmingUserDeletion.value = false;
-
-		form.reset();
-	};
+	function destroy(id) {
+		if (confirm("Are you sure you want to Delete")) {
+			form.delete(route("user.delete", id));
+		}
+	}
 </script>
 
 <template>
@@ -43,9 +33,7 @@
 
 		<EmployeeLayout>
 			<template #header>
-				<h2 class="font-semibold text-xl text-gray-800 leading-tight">
-					Employees
-				</h2>
+				<h2 class="font-semibold text-xl text-gray-800 leading-tight">User</h2>
 			</template>
 
 			<div class="py-12">
@@ -76,7 +64,24 @@
 											{{ role.name }} |
 										</div>
 									</td>
-									<td class="border px-4 py-2">{{ user.approval_status }}</td>
+									<td
+										class="border px-4 py-2"
+										v-if="user.approval_status == 'approved'"
+									>
+										Approved
+									</td>
+									<td
+										class="border px-4 py-2"
+										v-if="user.approval_status == 'rejected'"
+									>
+										Rejected
+									</td>
+									<td
+										class="border px-4 py-2"
+										v-if="user.approval_status == 'on_review'"
+									>
+										On Review
+									</td>
 									<td class="border px-4 py-2">
 										<NavLink :href="route('user.edit', { id: user.id })">
 											<PrimaryButton>Edit</PrimaryButton>
@@ -86,7 +91,7 @@
 											class="ml-3"
 											:class="{ 'opacity-25': form.processing }"
 											:disabled="form.processing"
-											@click="deleteUser(user.id)"
+											@click="destroy(user.id)"
 										>
 											Delete
 										</DangerButton>

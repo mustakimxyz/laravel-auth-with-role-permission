@@ -16,7 +16,7 @@ class CustomerSeeder extends Seeder
             'name' => 'Customer User',
             'email' => 'customer@admin.com',
             'password' => bcrypt('admin'),
-            'approval_status'=>'accepted',
+            'approval_status'=>'approved',
             'avatar' => ''
         ]);
         $customer->assignRole('customer');
